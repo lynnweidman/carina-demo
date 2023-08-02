@@ -18,11 +18,10 @@ package com.zebrunner.carina.demo.gui.pages.desktop;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
-import com.zebrunner.carina.demo.gui.pages.common.AllBrandsPageBase;
-import com.zebrunner.carina.demo.gui.pages.common.BrandModelsPageBase;
-import com.zebrunner.carina.demo.gui.pages.common.CompareModelsPageBase;
-import com.zebrunner.carina.demo.gui.pages.common.HomePageBase;
+import com.zebrunner.carina.demo.gui.components.header.HeaderMenu;
+import com.zebrunner.carina.demo.gui.pages.common.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.slf4j.Logger;
@@ -40,6 +39,9 @@ public class HomePage extends HomePageBase {
     @FindBy(id = "footmenu")
     private FooterMenu footerMenu;
 
+    @FindBy(id = "header")
+    private HeaderMenu headerMenu;
+
     @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
     private List<ExtendedWebElement> brandLinks;
 
@@ -52,6 +54,27 @@ public class HomePage extends HomePageBase {
     @FindBy(xpath = "//span[text()='All brands']//parent::a")
     private ExtendedWebElement allBrandsButton;
 
+    @FindBy(id = "login-active")
+    ExtendedWebElement loginIcon;
+
+    @FindBy(xpath = "//*[@id=\"login-popup2\"]/form")
+    private LoginForm logInForm;
+
+    @FindBy(id= "email")
+    WebElement emailTextbox;
+
+    @FindBy(id = "upass")
+    WebElement passwordTextbox;
+
+    @FindBy(id="nick-submit")
+    WebElement submit;
+
+    @FindBy(xpath = "//*[@id=\"body\"]/div/div[2]/p")
+    WebElement wrongEmailText;
+
+    @FindBy(xpath = "//*[@id=\"body\"]/div/div[2]/p")
+    WebElement wrongPasswordText;
+
     public HomePage(WebDriver driver) {
         super(driver);
         setUiLoadedMarker(newsColumn);
@@ -60,6 +83,16 @@ public class HomePage extends HomePageBase {
     @Override
     public FooterMenu getFooterMenu() {
         return footerMenu;
+    }
+
+    @Override
+    public HeaderMenu getHeaderMenu() {
+        return headerMenu;
+    }
+
+    @Override
+    public void openLoginForm() {
+
     }
 
     @Override
