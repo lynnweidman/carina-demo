@@ -20,7 +20,7 @@ public class MobileMyTestPractice implements IAbstractTest, IMobileUtils {
     @Test()
     @MethodOwner(owner = "Lynn Weidman")
     @TestLabel(name = "feature", value = {"mobile", "regression"})
-    public void MyPracticeTest() throws MalformedURLException {
+    public void myPracticeTest() throws MalformedURLException {
 
         String username = "Test user";
         String password = RandomStringUtils.randomAlphabetic(10);
