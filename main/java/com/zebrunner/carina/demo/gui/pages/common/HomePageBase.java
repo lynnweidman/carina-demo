@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.zebrunner.carina.demo.gui.pages.common;
 
+import com.zebrunner.carina.demo.gui.components.header.HeaderMenu;
 import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -31,15 +32,22 @@ public abstract class HomePageBase extends AbstractPage {
     public HomePageBase(WebDriver driver) {
         super(driver);
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
+
     }
 
     public abstract BrandModelsPageBase selectBrand(String brandName);
 
     public abstract FooterMenuBase getFooterMenu();
 
+    public abstract HeaderMenu getHeaderMenu();
+
+    public abstract void openLoginForm();
+
     public abstract CompareModelsPageBase openComparePage();
 
     public abstract AllBrandsPageBase openAllBrandsPage();
+
+
 
     @Override
     public void open() {
