@@ -1,50 +1,34 @@
 package com.zebrunner.carina.demo;
 
+
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
-import com.zebrunner.carina.demo.gui.components.header.HeaderMenu;
-import com.zebrunner.carina.demo.gui.pages.common.HomePageBase;
-import com.zebrunner.carina.demo.gui.pages.common.LoginFormBase;
 import com.zebrunner.carina.demo.gui.pages.desktop.HomePage;
 import com.zebrunner.carina.demo.gui.pages.desktop.LoginForm;
-import com.zebrunner.carina.demo.mobile.gui.pages.android.LoginPage;
-import com.zebrunner.carina.demo.mobile.gui.pages.common.LoginPageBase;
-import com.zebrunner.carina.demo.mobile.gui.pages.common.WelcomePageBase;
-import com.zebrunner.carina.demo.propertiesData.PropertiesData;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
 import java.io.*;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
 
 
 public class LoginTest implements IAbstractTest {
 
-    @Test()
+    @Test
     @MethodOwner(owner = "Lynn Weidman")
     public void testLogIn() throws IOException {
-        /*HomePage homePage = new HomePage(getDriver());
-        homePage.open();
-        Assert.assertTrue(homePage.isPageOpened(), "Home page doesn't open");
-*/
+
         SoftAssert softAssert = new SoftAssert();
 
-        //I know that we should use HomePage homePage = new HomePage(getDriver());
-        //But that is not working on my computer, so I'm having to hardcode it
-        WebDriver driver = new FirefoxDriver();
-        driver.manage().window().maximize();
+        //Open homepage
+        HomePage homePage = new HomePage(getDriver());
+        homePage.open();
+        Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
 
-        LoginForm loginForm = new LoginForm(driver);
-
-        //open homepage
-        loginForm.openHomePage();
-        softAssert.assertTrue(loginForm.homePageIsOpened());
+        //Open login form
+        LoginForm loginForm = homePage.getHeaderMenu().openLoginForm();
+        softAssert.assertTrue(loginForm.loginFormIsOpened(), "Login form is not opened.");
 
         //Retrieve email and Decrypt password from properties file
         Properties properties = new Properties();
@@ -53,8 +37,10 @@ public class LoginTest implements IAbstractTest {
 
         byte[] decodePassword = Base64.getDecoder().decode(encryptedPassword);
 
-        loginForm.login(properties.getProperty("email"), Arrays.toString(decodePassword));
-        softAssert.assertTrue(loginForm.successfulLogin());
+        loginForm.login(properties.getProperty("email"),  new String(decodePassword));
+        softAssert.assertEquals(loginForm.successfulLogin(), "test.user - user account");
+
+        softAssert.assertAll();
 
     }
 
@@ -62,16 +48,16 @@ public class LoginTest implements IAbstractTest {
     @MethodOwner(owner = "Lynn Weidman")
     public void testInvalidEmail() throws IOException {
 
-        //WebDriver driver = new ChromeDriver();
-        WebDriver driver = new FirefoxDriver();
-        driver.manage().window().maximize();
-
-        //open homepage
-        LoginForm loginForm = new LoginForm(driver);
         SoftAssert softAssert = new SoftAssert();
 
-        loginForm.openHomePage();
-        softAssert.assertTrue(loginForm.homePageIsOpened());
+        //Open homepage
+        HomePage homePage = new HomePage(getDriver());
+        homePage.open();
+        Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
+
+        //Open login form
+        LoginForm loginForm = homePage.getHeaderMenu().openLoginForm();
+        softAssert.assertTrue(loginForm.loginFormIsOpened(), "Login form is not opened.");
 
         //Decrypt password from properties file
         Properties properties = new Properties();
@@ -84,21 +70,23 @@ public class LoginTest implements IAbstractTest {
         loginForm.login("wrongEmail@email.com", new String(decodePassword));
         softAssert.assertEquals(loginForm.getInvalidEmailText(), "Reason: User record not found.", "Reason: User record not found.''Reason: Wrong email.");
 
+        softAssert.assertAll();
     }
 
     @Test()
     @MethodOwner(owner = "Lynn Weidman")
     public void testInvalidPassword() throws IOException {
 
-        WebDriver driver = new FirefoxDriver();
-        driver.manage().window().maximize();
-
-        //Open homepage
-        LoginForm loginForm = new LoginForm(driver);
         SoftAssert softAssert = new SoftAssert();
 
-        loginForm.openHomePage();
-        softAssert.assertTrue(loginForm.homePageIsOpened());
+        //Open homepage
+        HomePage homePage = new HomePage(getDriver());
+        homePage.open();
+        Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
+
+        //Open login form
+        LoginForm loginForm = homePage.getHeaderMenu().openLoginForm();
+        softAssert.assertTrue(loginForm.loginFormIsOpened(), "Login form is not opened.");
 
         //Get instance of the PropertiesData class to retrieve the password from the properties file.
         Properties properties = new Properties();
@@ -106,40 +94,14 @@ public class LoginTest implements IAbstractTest {
 
         //Enter invalid email and valid password
         loginForm.login(properties.getProperty("email"), "changemeee");
-        softAssert.assertEquals(loginForm.getInvalidPasswordText(), "Reason: Wrong password.", "Reason: Wrong password.");
+        softAssert.assertEquals(loginForm.getInvalidPasswordText(),("Reason: Wrong password."), "Did not get invalid password message");
 
+        softAssert.assertAll();
     }
 
-    @Test()
-    public void testPractice() throws IOException {
-/*
-        SoftAssert softAssert = new SoftAssert();
-        WebDriver driver = new FirefoxDriver();
-        driver.manage().window().maximize();
-
-        HomePageBase homePage = new HomePage(getDriver());
-        homePage.open();
-        Assert.assertTrue(homePage.isPageOpened(), "Home page doesn't open");
-
-        //Decrypting
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("C:\\Users\\lcwtr\\IdeaProjects\\carina-demo\\src\\test\\resources\\Login.properties"));
-        String encryptedPassword = properties.getProperty("encryptedPassword");
-        byte[] decryptedPassword = Base64.getDecoder().decode(encryptedPassword);
-        String pw = Arrays.toString(decryptedPassword);
-
-        LoginForm loginForm = new LoginForm(getDriver());
-        loginForm.login2(properties.getProperty("email"), pw);
-
-        softAssert.assertTrue(loginForm.successfulLogin());
-
-        System.out.println("decrypted password: " + decryptedPassword);*/
-
-    }
-
-    @Test
-    public void testEncryption() throws IOException {
-       /* String pw = "changeme";
+    //@Test
+   /* public void testEncryption() throws IOException {
+        String pw = "Password*555";
         byte[] encryptPassword = Base64.getEncoder().encode(pw.getBytes());
         System.out.println("Encrypted PW: " + new String(encryptPassword));
 
@@ -155,5 +117,14 @@ public class LoginTest implements IAbstractTest {
         byte[] decodePassword = Base64.getDecoder().decode(encryptedPassword);
         System.out.println("Decrypted PW from properties: " + new String(decodePassword));*/
 
+       /* Properties properties = new Properties();
+        properties.load(new FileInputStream("C:\\Users\\lcwtr\\IdeaProjects\\carina-demo\\src\\test\\resources\\Login.properties"));
+        String encryptedPassword = properties.getProperty("encryptedPassword");
+        System.out.println("Encryped pw ======" + encryptedPassword);
+        byte[] decryptedPassword = Base64.getDecoder().decode(encryptedPassword);
+        String pw = Arrays.toString(decryptedPassword);
+        System.out.println("Decryped pa ====  " + pw);*/
+
     }
-}
+
+
