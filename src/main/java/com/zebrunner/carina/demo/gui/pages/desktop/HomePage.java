@@ -18,6 +18,7 @@ package com.zebrunner.carina.demo.gui.pages.desktop;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+import com.zebrunner.carina.demo.gui.components.header.HeaderMenu;
 import com.zebrunner.carina.demo.gui.pages.common.AllBrandsPageBase;
 import com.zebrunner.carina.demo.gui.pages.common.BrandModelsPageBase;
 import com.zebrunner.carina.demo.gui.pages.common.CompareModelsPageBase;
@@ -40,6 +41,9 @@ public class HomePage extends HomePageBase {
     @FindBy(id = "footmenu")
     private FooterMenu footerMenu;
 
+    @FindBy(id = "header")
+    private HeaderMenu headerMenu;
+
     @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
     private List<ExtendedWebElement> brandLinks;
 
@@ -60,6 +64,11 @@ public class HomePage extends HomePageBase {
     @Override
     public FooterMenu getFooterMenu() {
         return footerMenu;
+    }
+
+    @Override
+    public HeaderMenu getHeaderMenu() {
+        return headerMenu;
     }
 
     @Override
