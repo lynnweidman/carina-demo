@@ -32,7 +32,6 @@ public abstract class HomePageBase extends AbstractPage {
     public HomePageBase(WebDriver driver) {
         super(driver);
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
-
     }
 
     public abstract BrandModelsPageBase selectBrand(String brandName);
@@ -41,13 +40,10 @@ public abstract class HomePageBase extends AbstractPage {
 
     public abstract HeaderMenu getHeaderMenu();
 
-    public abstract void openLoginForm();
 
     public abstract CompareModelsPageBase openComparePage();
 
     public abstract AllBrandsPageBase openAllBrandsPage();
-
-
 
     @Override
     public void open() {
